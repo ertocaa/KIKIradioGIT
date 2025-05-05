@@ -1,32 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Radio Kiki Player</title>
-    <!-- Collegamento al CSS (se presente) -->
-    <link rel="stylesheet" href="style.css">
-</head>
 <body>
-    <!-- Elemento audio - Deve rimanere così -->
-    <audio id="radio-stream" hidden>
-        <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
-    </audio>
+    <div class="radio-interface bloom-effect">
+        <audio id="radio-stream" hidden>
+            <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
+        </audio>
 
-    <!-- Unico pulsante play/pause -->
-    <button id="playPauseBtn">Play</button>
+        <button id="playPauseBtn" class="bloom-effect">▶ PLAY</button>
 
-    <!-- Sezione metadati -->
-    <div id="current-show">
-        <h3>NOW PLAYING -</h3>
-        <div id="current-track"></div>
-        <div id="current-artist"></div>
-    </div>
+        <div id="current-show" class="metadata-display">
+            <h3>NOW PLAYING -</h3>
+            <div id="current-track" class="marquee"></div>
+            <div id="current-artist" class="marquee"></div>
+        </div>
 
-    <div id="next-show">
-        <h3>NEXT UP</h3>
-        <div id="next-track"></div>
-        <div id="next-artist"></div>
+        <div id="next-show" class="metadata-display">
+            <h3>NEXT UP</h3>
+            <div id="next-track" class="marquee"></div>
+            <div id="next-artist" class="marquee"></div>
+        </div>
     </div>
 
     <script src="player.js"></script>
 </body>
-</html>
