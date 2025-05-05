@@ -1,4 +1,4 @@
-// Configurazione player audio
+s// Configurazione player audio
 const audioPlayer = document.getElementById('radio-stream');
 const playPauseBtn = document.getElementById('playPauseBtn');
 let isPlaying = false; // Stato iniziale: pausa
@@ -35,7 +35,7 @@ async function fetchRadioData() {
             document.getElementById('next-track').textContent = next.metadata.track_title;
             document.getElementById('next-artist').textContent = next.metadata.artist_name;
         } else {
-            document.getElementById('next-track').textContent = "Nothing Sheduled";
+            document.getElementById('next-track').textContent = "Nessuna traccia in programma";
             document.getElementById('next-artist').textContent = "";
         }
 
