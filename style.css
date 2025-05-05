@@ -1,0 +1,95 @@
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=DS-Digital&display=swap');
+
+body {
+    background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DS-Digital', monospace;
+    color: #00ff00;
+    overflow: hidden;
+}
+
+/* Container stile autoradio */
+.radio-interface {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid #4d4d4d;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3),
+                inset 0 0 15px rgba(0, 255, 0, 0.2);
+    width: 300px;
+}
+
+/* Pulsante Play/Pause */
+#playPauseBtn {
+    background: linear-gradient(to bottom, #4d4d4d, #333);
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 15px 25px;
+    border-radius: 50%;
+    font-family: 'DS-Digital', monospace;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin: 10px 0;
+    text-shadow: 0 0 5px #00ff00;
+    transition: all 0.3s ease;
+}
+
+#playPauseBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #00ff00;
+}
+
+#playPauseBtn:active {
+    background: linear-gradient(to top, #4d4d4d, #333);
+}
+
+/* Display LCD */
+.metadata-display {
+    background: #001a00;
+    border: 2px solid #004d00;
+    padding: 15px;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.marquee {
+    white-space: nowrap;
+    position: relative;
+    animation: marquee 15s linear infinite;
+    text-transform: uppercase;
+    font-size: 1.2em;
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Testi specifici */
+h3 {
+    color: #00ff00;
+    border-bottom: 1px solid #00ff00;
+    padding-bottom: 5px;
+    text-shadow: 0 0 5px #00ff00;
+}
+
+#current-show, #next-show {
+    margin: 15px 0;
+}
+
+/* Effetto Bloom */
+.bloom-effect {
+    filter: drop-shadow(0 0 2px #00ff00)
+            drop-shadow(0 0 5px #00ff00);
+}
