@@ -4,8 +4,19 @@ const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 
 // Controlli audio base
-playBtn.addEventListener('click', () => audioPlayer.play());
-pauseBtn.addEventListener('click', () => audioPlayer.pause());
+const playPauseBtn = document.getElementById('playPauseBtn');
+let isPlaying = false;
+
+playPauseBtn.addEventListener('click', () => {
+    if(isPlaying) {
+        audioPlayer.pause();
+        playPauseBtn.textContent = 'Play';
+    } else {
+        audioPlayer.play();
+        playPauseBtn.textContent = 'Pause';
+    }
+    isPlaying = !isPlaying;
+});
 
 // Funzione esistente per i metadati (corretta)
 async function fetchRadioData() {
@@ -32,6 +43,12 @@ async function fetchRadioData() {
         console.error('Errore nel recupero dei dati:', error);
     }
 }
+
+// Aggiungi questo per aggiornare lo stato se l'audio finisce
+audioPlayer.addEventListener('ended', () => {
+    isPlaying = false;
+    playPauseBtn.textContent = 'Play';
+});
 
 // Aggiornamento metadati ogni 5 secondi
 setInterval(fetchRadioData, 5000);
