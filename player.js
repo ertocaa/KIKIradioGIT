@@ -1,18 +1,7 @@
 // Configurazione player audio
 const audioPlayer = document.getElementById('radio-stream');
-const playPauseBtn = document.getElementById('playPauseBtn');
-
-// Toggle Play/Pause
-playPauseBtn.addEventListener('click', () => {
-    if(audioPlayer.paused) {
-        audioPlayer.play();
-        playPauseBtn.textContent = 'Pause';
-    } else {
-        audioPlayer.pause();
-        playPauseBtn.textContent = 'Play';
-    }
-});
-
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
 
 // Controlli audio base
 playBtn.addEventListener('click', () => audioPlayer.play());
@@ -25,15 +14,18 @@ async function fetchRadioData() {
         const data = await response.json();
         
         // Traccia CORRENTE
-        document.getElementById('current-track').textContent = data.current.metadata.track_title;
-        document.getElementById('current-artist').textContent = data.current.metadata.artist_name;
+        const current = data.current.metadata;
+        document.getElementById('current-track').textContent = current.track_title;
+        document.getElementById('current-artist').textContent = current.artist_name;
 
         // Traccia SUCCESSIVA
-       if(data.next) {
-            document.getElementById('next-track').textContent = data.next.metadata.track_title;
-            document.getElementById('next-artist').textContent = data.next.metadata.artist_name;
+        const next = data.next;
+        if(next) {
+            document.getElementById('next-track').textContent = next.metadata.track_title;
+            document.getElementById('next-artist').textContent = next.metadata.artist_name;
         } else {
-            document.getElementById('next-track').textContent = "No upcoming tracks";
+            document.getElementById('next-track').textContent = "Nessuna traccia in programma";
+            document.getElementById('next-artist').textContent = "";
         }
 
     } catch (error) {
@@ -44,5 +36,3 @@ async function fetchRadioData() {
 // Aggiornamento metadati ogni 5 secondi
 setInterval(fetchRadioData, 5000);
 fetchRadioData(); // Chiamata iniziale
-
-// Correzione sintassi: rimossa la parentesi graffa e parentesi tonfa chiusa superflua alla fine
