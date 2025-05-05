@@ -1,9 +1,9 @@
-// player.js
+// Configurazione elementi
 const audioPlayer = document.getElementById('radio-stream');
 const playPauseBtn = document.getElementById('playPauseBtn');
-let isPlaying = false;
+let isPlaying = false; // Stato iniziale: pausa
 
-// Funzione principale
+// Funzione principale per i metadati
 async function fetchRadioData() {
     try {
         const response = await fetch('https://radiokiki.airtime.pro/api/live-info');
@@ -21,61 +21,58 @@ async function fetchRadioData() {
     }
 }
 
-// Aggiorna i metadati
+// Aggiorna i testi delle tracce
 function updateTrackInfo(data) {
+    // Funzione helper per impostare i testi
     const setField = (id, value) => {
         const element = document.getElementById(id);
         element.textContent = value || "--- OFFLINE :c ---";
     };
 
     // Current Track
-    if(data.current) {
-        setField('current-track', data.current.metadata?.track_title);
-        setField('current-artist', data.current.metadata?.artist_name);
-    } else {
-        setField('current-track', null);
-        setField('current-artist', null);
-    }
+    setField('current-track', data.current?.metadata?.track_title);
+    setField('current-artist', data.current?.metadata?.artist_name);
 
     // Next Track
-    if(data.next) {
-        setField('next-track', data.next.metadata?.track_title);
-        setField('next-artist', data.next.metadata?.artist_name);
-    } else {
-        setField('next-track', null);
-        setField('next-artist', null);
-    }
+    setField('next-track', data.next?.metadata?.track_title);
+    setField('next-artist', data.next?.metadata?.artist_name);
 }
 
-// Gestione offline
+// Imposta stato offline solo sui testi
 function setOfflineStatus() {
     const elements = [
         'current-track', 'current-artist',
         'next-track', 'next-artist'
     ];
-
     elements.forEach(id => {
         document.getElementById(id).textContent = "--- OFFLINE :c ---";
     });
-
-    if(!audioPlayer.paused) {
-        audioPlayer.pause();
-        isPlaying = false;
-        playPauseBtn.textContent = 'Play';
-    }
 }
 
-// Controlli play/pause
+// Gestione play/pause indipendente dallo stato offline
 playPauseBtn.addEventListener('click', () => {
     if(isPlaying) {
         audioPlayer.pause();
     } else {
-        audioPlayer.play().catch(() => setOfflineStatus());
+        audioPlayer.play().catch(error => {
+            console.log('Errore riproduzione:', error);
+        });
     }
     isPlaying = !isPlaying;
     playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
 });
 
-// Aggiornamento automatico
+// Sincronizza stato con eventi nativi
+audioPlayer.addEventListener('playing', () => {
+    isPlaying = true;
+    playPauseBtn.textContent = 'Pause';
+});
+
+audioPlayer.addEventListener('pause', () => {
+    isPlaying = false;
+    playPauseBtn.textContent = 'Play';
+});
+
+// Aggiornamento metadati ogni 5 secondi
 setInterval(fetchRadioData, 5000);
-fetchRadioData();
+fetchRadioData(); // Chiamata iniziale
