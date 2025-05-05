@@ -25,18 +25,15 @@ async function fetchRadioData() {
         const data = await response.json();
         
         // Traccia CORRENTE
-        const current = data.current.metadata;
-        document.getElementById('current-track').textContent = current.track_title;
-        document.getElementById('current-artist').textContent = current.artist_name;
+        document.getElementById('current-track').textContent = data.current.metadata.track_title;
+        document.getElementById('current-artist').textContent = data.current.metadata.artist_name;
 
         // Traccia SUCCESSIVA
-        const next = data.next;
-        if(next) {
-            document.getElementById('next-track').textContent = next.metadata.track_title;
-            document.getElementById('next-artist').textContent = next.metadata.artist_name;
+       if(data.next) {
+            document.getElementById('next-track').textContent = data.next.metadata.track_title;
+            document.getElementById('next-artist').textContent = data.next.metadata.artist_name;
         } else {
-            document.getElementById('next-track').textContent = "Nessuna traccia in programma";
-            document.getElementById('next-artist').textContent = "";
+            document.getElementById('next-track').textContent = "No upcoming tracks";
         }
 
     } catch (error) {
