@@ -1,27 +1,13 @@
 // Configurazione player audio
 const audioPlayer = document.getElementById('radio-stream');
-const playPauseBtn = document.getElementById('playPauseBtn');
-let isPlaying = false;
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
 
-// Controllo audio unico
-playPauseBtn.addEventListener('click', () => {
-    if(isPlaying) {
-        audioPlayer.pause();
-        playPauseBtn.textContent = 'Play';
-    } else {
-        audioPlayer.play();
-        playPauseBtn.textContent = 'Pause';
-    }
-    isPlaying = !isPlaying;
-});
+// Controlli audio base
+playBtn.addEventListener('click', () => audioPlayer.play());
+pauseBtn.addEventListener('click', () => audioPlayer.pause());
 
-// Gestione fine traccia
-audioPlayer.addEventListener('ended', () => {
-    isPlaying = false;
-    playPauseBtn.textContent = 'Play';
-});
-
-// Funzione metadati
+// Funzione esistente per i metadati (corretta)
 async function fetchRadioData() {
     try {
         const response = await fetch('https://radiokiki.airtime.pro/api/live-info');
@@ -47,6 +33,6 @@ async function fetchRadioData() {
     }
 }
 
-// Aggiornamento metadati
+// Aggiornamento metadati ogni 5 secondi
 setInterval(fetchRadioData, 5000);
-fetchRadioData();
+fetchRadioData(); // Chiamata iniziale
