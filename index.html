@@ -2,24 +2,28 @@
 <html>
 <head>
     <title>Radio Kiki Player</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="player.js" defer></script>
 </head>
 <body>
-    <!-- Sezione in onda -->
-    <div class="container">
-        <div class="show-box current">
-            <h2>IN ONDA ADESSO</h2>
-            <div id="current-track" class="track-title">Caricamento...</div>
-            <div id="current-artist" class="artist-name"></div>
-        </div>
+    <!-- Aggiungi questi elementi per l'audio -->
+    <audio id="radio-stream" hidden>
+        <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
+    </audio>
+    <button id="playBtn">Play</button>
+    <button id="pauseBtn">Pause</button>
 
-        <!-- Sezione prossima traccia -->
-        <div class="show-box next">
-            <h2>PROSSIMAMENTE</h2>
-            <div id="next-track" class="track-title">Caricamento...</div>
-            <div id="next-artist" class="artist-name"></div>
-        </div>
+    <!-- Metadati esistenti -->
+    <div id="current-show">
+        <h3>IN ONDA:</h3>
+        <div id="current-track"></div>
+        <div id="current-artist"></div>
     </div>
+
+    <div id="next-show">
+        <h3>PROSSIMAMENTE:</h3>
+        <div id="next-track"></div>
+        <div id="next-artist"></div>
+    </div>
+
+    <script src="player.js"></script>
 </body>
 </html>
