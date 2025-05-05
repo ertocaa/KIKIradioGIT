@@ -1,33 +1,40 @@
-async function updateMetadata() {
+// Configurazione player audio
+const audioPlayer = document.getElementById('radio-stream');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+
+// Controlli audio base
+playBtn.addEventListener('click', () => audioPlayer.play());
+pauseBtn.addEventListener('click', () => audioPlayer.pause());
+
+// Funzione esistente per i metadati (corretta)
+async function fetchRadioData() {
     try {
         const response = await fetch('https://radiokiki.airtime.pro/api/live-info');
         const data = await response.json();
         
-        // Estrai i dati della traccia corrente
-        const currentTrack = data.current.metadata.track_title || "Traccia sconosciuta";
-        const currentArtist = data.current.metadata.artist_name || "Artista sconosciuto";
-        
-        // Estrai i dati della prossima traccia (se disponibili)
-        let nextTrack = "Nessuna traccia in coda";
-        let nextArtist = "";
-        
-        if(data.next && data.next.metadata) {
-            nextTrack = data.next.metadata.track_title;
-            nextArtist = data.next.metadata.artist_name;
+        // Traccia CORRENTE
+        const current = data.current.metadata;
+        document.getElementById('current-track').textContent = current.track_title;
+        document.getElementById('current-artist').textContent = current.artist_name;
+
+        // Traccia SUCCESSIVA
+        const next = data.next;
+        if(next) {
+            document.getElementById('next-track').textContent = next.metadata.track_title;
+            document.getElementById('next-artist').textContent = next.metadata.artist_name;
+        } else {
+            document.getElementById('next-track').textContent = "Nessuna traccia in programma";
+            document.getElementById('next-artist').textContent = "";
         }
 
-        // Aggiorna il DOM
-        document.getElementById('current-track').textContent = currentTrack;
-        document.getElementById('current-artist').textContent = currentArtist;
-        document.getElementById('next-track').textContent = nextTrack;
-        document.getElementById('next-artist').textContent = nextArtist;
-
     } catch (error) {
-        console.error("Errore nel caricamento dei dati:", error);
-        document.getElementById('current-track').textContent = "Errore nel caricamento";
+        console.error('Errore nel recupero dei dati:', error);
     }
 }
 
-// Aggiorna ogni 5 secondi e all'avvio
-setInterval(updateMetadata, 5000);
-window.addEventListener('DOMContentLoaded', updateMetadata);
+// Aggiornamento metadati ogni 5 secondi
+setInterval(fetchRadioData, 5000);
+fetchRadioData(); // Chiamata iniziale
+
+// Correzione sintassi: rimossa la parentesi graffa e parentesi tonfa chiusa superflua alla fine
