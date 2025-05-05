@@ -1,23 +1,114 @@
-<body>
-    <div class="radio-interface bloom-effect">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Radio Kiki Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segment7Standard&display=swap" rel="stylesheet">
+</head>
+<body style="background:#000; height:100vh; margin:0; display:flex; justify-content:center; align-items:center; overflow:hidden;">
+    
+    <!-- Container autoradio -->
+    <div style="background:#333; padding:2rem; border-radius:10px; border:3px solid #666; box-shadow:0 0 20px rgba(0,255,0,0.3); position:relative; width:300px;">
+        
+        <!-- Elemento audio -->
         <audio id="radio-stream" hidden>
             <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
         </audio>
 
-        <button id="playPauseBtn" class="bloom-effect">▶ PLAY</button>
+        <!-- Pulsante Play/Pause -->
+        <button id="playPauseBtn" 
+                style="background:#444; 
+                       border:2px solid #0f0;
+                       color:#0f0;
+                       padding:15px 25px;
+                       border-radius:50%;
+                       font-family:'Segment7Standard', monospace;
+                       font-size:1.2em;
+                       text-transform:uppercase;
+                       cursor:pointer;
+                       margin:10px auto;
+                       display:block;
+                       text-shadow:0 0 5px #0f0;
+                       transition:all 0.3s ease;">
+            ▶ PLAY
+        </button>
 
-        <div id="current-show" class="metadata-display">
-            <h3>NOW PLAYING -</h3>
-            <div id="current-track" class="marquee"></div>
-            <div id="current-artist" class="marquee"></div>
+        <!-- Display LCD -->
+        <div style="background:#001100; 
+                   border:2px solid #0f0;
+                   padding:1rem;
+                   margin:15px 0;
+                   overflow:hidden;
+                   position:relative;
+                   box-shadow:inset 0 0 10px rgba(0,255,0,0.3);">
+            
+            <!-- Now Playing -->
+            <h3 style="color:#0f0; margin:0 0 10px 0; border-bottom:1px solid #0f0; 
+                      font-family:'Segment7Standard', monospace;
+                      text-shadow:0 0 5px #0f0;">
+                NOW PLAYING -
+            </h3>
+            <div id="current-track" 
+                 style="color:#0f0; 
+                        font-family:'Segment7Standard', monospace;
+                        white-space:nowrap;
+                        position:relative;
+                        animation:marquee 15s linear infinite;
+                        text-shadow:0 0 5px #0f0;">
+                Loading...
+            </div>
+            <div id="current-artist" 
+                 style="color:#0f0;
+                        font-family:'Segment7Standard', monospace;
+                        white-space:nowrap;
+                        position:relative;
+                        animation:marquee 15s linear infinite;
+                        text-shadow:0 0 5px #0f0;">
+                Loading...
+            </div>
         </div>
 
-        <div id="next-show" class="metadata-display">
-            <h3>NEXT UP</h3>
-            <div id="next-track" class="marquee"></div>
-            <div id="next-artist" class="marquee"></div>
+        <!-- Next Show -->
+        <div style="background:#001100; 
+                   border:2px solid #0f0;
+                   padding:1rem;
+                   margin:15px 0;
+                   overflow:hidden;
+                   position:relative;
+                   box-shadow:inset 0 0 10px rgba(0,255,0,0.3);">
+            <h3 style="color:#0f0; margin:0 0 10px 0; border-bottom:1px solid #0f0;
+                      font-family:'Segment7Standard', monospace;
+                      text-shadow:0 0 5px #0f0;">
+                NEXT UP
+            </h3>
+            <div id="next-track" 
+                 style="color:#0f0;
+                        font-family:'Segment7Standard', monospace;
+                        white-space:nowrap;
+                        position:relative;
+                        animation:marquee 15s linear infinite;
+                        text-shadow:0 0 5px #0f0;">
+                Loading...
+            </div>
+            <div id="next-artist" 
+                 style="color:#0f0;
+                        font-family:'Segment7Standard', monospace;
+                        white-space:nowrap;
+                        position:relative;
+                        animation:marquee 15s linear infinite;
+                        text-shadow:0 0 5px #0f0;">
+                Loading...
+            </div>
         </div>
+
+        <!-- Animazione marquee -->
+        <style>
+            @keyframes marquee {
+                0% { transform: translateX(100%); }
+                100% { transform: translateX(-100%); }
+            }
+        </style>
     </div>
 
     <script src="player.js"></script>
 </body>
+</html>
