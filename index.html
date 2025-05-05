@@ -2,9 +2,16 @@
 <html>
 <head>
     <title>Radio Kiki Player</title>
-    <script src="player.js"></script>
 </head>
 <body>
+    <!-- Aggiungi questi elementi per l'audio -->
+    <audio id="radio-stream" hidden>
+        <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
+    </audio>
+    <button id="playBtn">Play</button>
+    <button id="pauseBtn">Pause</button>
+
+    <!-- Metadati esistenti -->
     <div id="current-show">
         <h3>IN ONDA:</h3>
         <div id="current-track"></div>
@@ -16,6 +23,7 @@
         <div id="next-track"></div>
         <div id="next-artist"></div>
     </div>
+
     <script src="player.js"></script>
 </body>
 </html>
