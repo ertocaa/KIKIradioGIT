@@ -2,27 +2,31 @@
 <html>
 <head>
     <title>Radio Kiki Player</title>
+    <!-- Collegamento CSS (crea un file style.css vuoto nella stessa cartella) -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Aggiungi questi elementi per l'audio -->
+    <!-- Elemento audio -->
     <audio id="radio-stream" hidden>
         <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
     </audio>
+
+    <!-- Pulsante unico play/pause -->
     <button id="playPauseBtn">Play</button>
 
-    <!-- Metadati esistenti -->
+    <!-- Metadati -->
     <div id="current-show">
-        <h3>IN ONDA:</h3>
+        <h3>NOW PLAYING -</h3>
         <div id="current-track"></div>
         <div id="current-artist"></div>
     </div>
 
     <div id="next-show">
-        <h3>PROSSIMAMENTE:</h3>
+        <h3>NEXT UP</h3>
         <div id="next-track"></div>
         <div id="next-artist"></div>
     </div>
 
     <script src="player.js"></script>
 </body>
-</html> 
+</html>
