@@ -1,49 +1,58 @@
-s// Configurazione player audio
-const audioPlayer = document.getElementById('radio-stream');
-const playPauseBtn = document.getElementById('playPauseBtn');
-let isPlaying = false; // Stato iniziale: pausa
-
-// Inizializza correttamente il pulsante
-playPauseBtn.textContent = 'Play';
-
-// Controllo audio
-playPauseBtn.addEventListener('click', () => {
-    if(isPlaying) {
-        audioPlayer.pause();
-        playPauseBtn.textContent = 'Play';
-    } else {
-        audioPlayer.play();
-        playPauseBtn.textContent = 'Pause';
-    }
-    isPlaying = !isPlaying;
-});
-
-// Funzione esistente per i metadati (corretta)
 async function fetchRadioData() {
     try {
         const response = await fetch('https://radiokiki.airtime.pro/api/live-info');
         const data = await response.json();
-        
-        // Traccia CORRENTE
-        const current = data.current.metadata;
-        document.getElementById('current-track').textContent = current.track_title;
-        document.getElementById('current-artist').textContent = current.artist_name;
 
-        // Traccia SUCCESSIVA
-        const next = data.next;
-        if(next) {
-            document.getElementById('next-track').textContent = next.metadata.track_title;
-            document.getElementById('next-artist').textContent = next.metadata.artist_name;
-        } else {
-            document.getElementById('next-track').textContent = "Nothing Sheduled";
-            document.getElementById('next-artist').textContent = "";
+        // Controllo stato offline
+        if(data.current === null && data.next === null) {
+            setOfflineStatus();
+            return;
         }
 
+        // Aggiorna i metadati solo se lo stream è attivo
+        updateTrackInfo(data);
+
     } catch (error) {
-        console.error('Errore nel recupero dei dati:', error);
+        console.error('Errore:', error);
+        setOfflineStatus();
     }
 }
 
-// Aggiornamento metadati ogni 5 secondi
-setInterval(fetchRadioData, 5000);
-fetchRadioData(); // Chiamata iniziale
+function updateTrackInfo(data) {
+    // Current Track
+    const currentElement = document.getElementById('current-track');
+    const currentArtist = document.getElementById('current-artist');
+    
+    if(data.current?.metadata) {
+        currentElement.textContent = data.current.metadata.track_title;
+        currentArtist.textContent = data.current.metadata.artist_name;
+    } else {
+        currentElement.textContent = "--- OFFLINE :c ---";
+        currentArtist.textContent = "--- OFFLINE :c ---";
+    }
+
+    // Next Track
+    const nextElement = document.getElementById('next-track');
+    const nextArtist = document.getElementById('next-artist');
+    
+    if(data.next?.metadata) {
+        nextElement.textContent = data.next.metadata.track_title;
+        nextArtist.textContent = data.next.metadata.artist_name;
+    } else {
+        nextElement.textContent = "--- OFFLINE :c ---";
+        nextArtist.textContent = "--- OFFLINE :c ---";
+    }
+}
+
+function setOfflineStatus() {
+    const offlineText = "--- OFFLINE :c ---";
+    document.querySelectorAll('#current-track, #current-artist, #next-track, #next-artist')
+           .forEach(el => el.textContent = offlineText);
+    
+    // Blocca la riproduzione
+    if(!audioPlayer.paused) {
+        audioPlayer.pause();
+        isPlaying = false;
+        playPauseBtn.textContent = 'Play';
+    }
+}
