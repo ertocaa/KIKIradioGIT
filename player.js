@@ -1,108 +1,81 @@
-// Configurazione player
+// player.js
 const audioPlayer = document.getElementById('radio-stream');
 const playPauseBtn = document.getElementById('playPauseBtn');
 let isPlaying = false;
 
-// Debug iniziale
-console.log('Elementi trovati:', {
-    audioPlayer,
-    playPauseBtn,
-    currentTrack: document.getElementById('current-track'),
-    currentArtist: document.getElementById('current-artist'),
-    nextTrack: document.getElementById('next-track'),
-    nextArtist: document.getElementById('next-artist')
-});
-
-// Controllo play/pause
-playPauseBtn.addEventListener('click', () => {
-    console.log('Stato pre-click:', {isPlaying, paused: audioPlayer.paused});
-    if(isPlaying) {
-        audioPlayer.pause();
-    } else {
-        audioPlayer.play().catch(err => {
-            console.error('Errore riproduzione:', err);
-            setOfflineStatus();
-        });
-    }
-    isPlaying = !isPlaying;
-    updateButtonState();
-});
-
-// Aggiornamento interfaccia
-function updateButtonState() {
-    playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
-    console.log('Nuovo stato pulsante:', {isPlaying, text: playPauseBtn.textContent});
-}
-
-// Gestione metadati
+// Funzione principale
 async function fetchRadioData() {
     try {
-        console.log('Inizio fetch metadati...');
         const response = await fetch('https://radiokiki.airtime.pro/api/live-info');
         const data = await response.json();
-        console.log('Dati API:', data);
 
-        if(!data.current && !data.next) {
-            console.log('Rilevato stato offline via API');
+        // Controllo stato offline
+        if(data.current === null && data.next === null) {
             setOfflineStatus();
         } else {
             updateTrackInfo(data);
-            if(!isPlaying) {
-                console.log('Ripristino stato play');
-                isPlaying = true;
-                updateButtonState();
-            }
         }
 
     } catch (error) {
-        console.error('Errore fetch:', error);
         setOfflineStatus();
     }
 }
 
-// Aggiorna i testi
+// Aggiorna i metadati
 function updateTrackInfo(data) {
-    console.log('Aggiornamento tracce con:', data);
-    const setText = (elementId, text) => {
-        const el = document.getElementById(elementId);
-        if(el) el.textContent = text || '--- OFFLINE :c ---';
+    const setField = (id, value) => {
+        const element = document.getElementById(id);
+        element.textContent = value || "--- OFFLINE :c ---";
     };
 
-    setText('current-track', data.current?.metadata?.track_title);
-    setText('current-artist', data.current?.metadata?.artist_name);
-    setText('next-track', data.next?.metadata?.track_title);
-    setText('next-artist', data.next?.metadata?.artist_name);
+    // Current Track
+    if(data.current) {
+        setField('current-track', data.current.metadata?.track_title);
+        setField('current-artist', data.current.metadata?.artist_name);
+    } else {
+        setField('current-track', null);
+        setField('current-artist', null);
+    }
+
+    // Next Track
+    if(data.next) {
+        setField('next-track', data.next.metadata?.track_title);
+        setField('next-artist', data.next.metadata?.artist_name);
+    } else {
+        setField('next-track', null);
+        setField('next-artist', null);
+    }
 }
 
 // Gestione offline
 function setOfflineStatus() {
-    console.log('Attivazione modalità offline');
-    ['current-track', 'current-artist', 'next-track', 'next-artist'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.textContent = '--- OFFLINE :c ---';
+    const elements = [
+        'current-track', 'current-artist',
+        'next-track', 'next-artist'
+    ];
+
+    elements.forEach(id => {
+        document.getElementById(id).textContent = "--- OFFLINE :c ---";
     });
 
-    if(isPlaying) {
-        console.log('Forzatura stop riproduzione');
+    if(!audioPlayer.paused) {
         audioPlayer.pause();
         isPlaying = false;
-        updateButtonState();
+        playPauseBtn.textContent = 'Play';
     }
 }
 
-// Controlli automatici
-audioPlayer.addEventListener('playing', () => {
-    console.log('Evento playing attivato');
-    isPlaying = true;
-    updateButtonState();
+// Controlli play/pause
+playPauseBtn.addEventListener('click', () => {
+    if(isPlaying) {
+        audioPlayer.pause();
+    } else {
+        audioPlayer.play().catch(() => setOfflineStatus());
+    }
+    isPlaying = !isPlaying;
+    playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
 });
 
-audioPlayer.addEventListener('pause', () => {
-    console.log('Evento pause attivato');
-    isPlaying = false;
-    updateButtonState();
-});
-
-// Avvia il sistema
+// Aggiornamento automatico
 setInterval(fetchRadioData, 5000);
 fetchRadioData();
