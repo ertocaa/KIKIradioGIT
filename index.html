@@ -1,182 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Radio Kiki 2000</title>
-    <link href="https://fonts.googleapis.com/css2?family=Segment7Standard&display=swap" rel="stylesheet">
+    <title>Radio Kiki Player</title>
+    <!-- Collegamento al CSS (se presente) -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="background:#000; height:100vh; margin:0; display:flex; justify-content:center; align-items:center; overflow:hidden; position:relative;">
+<body>
+    <!-- Elemento audio - Deve rimanere così -->
+    <audio id="radio-stream" hidden>
+        <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
+    </audio>
 
-<!-- Effetto foglio metallico -->
-<div style="position:absolute; width:100%; height:100%; background: repeating-linear-gradient(45deg, 
-    rgba(255,255,255,0.03) 0px, 
-    rgba(255,255,255,0.03) 2px, 
-    transparent 2px, 
-    transparent 4px); pointer-events:none; z-index:1;"></div>
+    <!-- Unico pulsante play/pause -->
+    <button id="playPauseBtn">Play</button>
 
-<!-- Main Container -->
-<div style="background:linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 100%); 
-            padding:2rem; 
-            border-radius:15px; 
-            border:4px solid #3a3a3a;
-            box-shadow:0 0 30px rgba(0,255,0,0.2),
-                       inset 0 0 15px rgba(0,255,0,0.1);
-            width:340px;
-            position:relative;
-            z-index:2;
-            transform:perspective(800px) rotateX(5deg);">
-
-    <!-- Display a LED -->
-    <div style="background:#001a00;
-                border:3px solid #0f0;
-                border-radius:8px;
-                padding:1.5rem;
-                margin-bottom:1.5rem;
-                position:relative;
-                box-shadow:inset 0 0 20px rgba(0,255,0,0.2),
-                          0 0 30px rgba(0,255,0,0.1);">
-        
-        <!-- Now Playing -->
-        <div style="color:#0f0; 
-                    font-family:'Segment7Standard', monospace;
-                    font-size:1.4em;
-                    text-shadow:0 0 10px #0f0;
-                    margin-bottom:1rem;
-                    border-bottom:2px solid #0f0;
-                    padding-bottom:0.5rem;
-                    letter-spacing:2px;">
-            NOW_PLAYING
-        </div>
-        
-        <div id="current-track" style="color:#0f0; 
-                    font-family:'Segment7Standard', monospace;
-                    white-space:nowrap;
-                    overflow:hidden;
-                    position:relative;
-                    font-size:1.2em;
-                    text-shadow:0 0 8px #0f0;
-                    animation:scroll 15s linear infinite;">
-            █░░ LOADING... ░░█
-        </div>
+    <!-- Sezione metadati -->
+    <div id="current-show">
+        <h3>NOW PLAYING -</h3>
+        <div id="current-track"></div>
+        <div id="current-artist"></div>
     </div>
 
-    <!-- Pulsantiera -->
-    <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:2rem;">
-        <!-- Knob -->
-        <div style="width:40px; 
-                   height:40px;
-                   border-radius:50%;
-                   background:radial-gradient(circle at 30% 30%, #4a4a4a, #2a2a2a);
-                   border:2px solid #0f0;
-                   box-shadow:0 0 10px rgba(0,255,0,0.3);
-                   position:relative;">
-            <div style="position:absolute; 
-                       top:50%; 
-                       left:50%; 
-                       transform:translate(-50%,-50%);
-                       color:#0f0;
-                       font-size:12px;">
-                ◉
-            </div>
-        </div>
-
-        <!-- Play Button -->
-        <button id="playPauseBtn" style="background:radial-gradient(circle at 30% 30%, #4a4a4a, #2a2a2a);
-                    width:60px;
-                    height:60px;
-                    border:3px solid #0f0;
-                    border-radius:50%;
-                    color:#0f0;
-                    font-family:'Segment7Standard', monospace;
-                    font-size:1.5em;
-                    cursor:pointer;
-                    text-shadow:0 0 10px #0f0;
-                    transition:all 0.3s ease;
-                    box-shadow:0 0 15px rgba(0,255,0,0.3),
-                              inset 0 0 10px rgba(0,255,0,0.2);">
-            ▶
-        </button>
-
-        <!-- Knob -->
-        <div style="width:40px; 
-                   height:40px;
-                   border-radius:50%;
-                   background:radial-gradient(circle at 30% 30%, #4a4a4a, #2a2a2a);
-                   border:2px solid #0f0;
-                   box-shadow:0 0 10px rgba(0,255,0,0.3);
-                   position:relative;">
-            <div style="position:absolute; 
-                       top:50%; 
-                       left:50%; 
-                       transform:translate(-50%,-50%);
-                       color:#0f0;
-                       font-size:12px;">
-                ◉
-            </div>
-        </div>
+    <div id="next-show">
+        <h3>NEXT UP</h3>
+        <div id="next-track"></div>
+        <div id="next-artist"></div>
     </div>
 
-    <!-- Display secondario -->
-    <div style="background:#001a00;
-                border:3px solid #0f0;
-                border-radius:8px;
-                padding:1rem;
-                position:relative;
-                box-shadow:inset 0 0 15px rgba(0,255,0,0.2);">
-        
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-            <div>
-                <div style="color:#0f0; 
-                            font-family:'Segment7Standard', monospace;
-                            font-size:0.9em;
-                            text-shadow:0 0 5px #0f0;
-                            border-bottom:1px solid #0f0;
-                            margin-bottom:0.5rem;">
-                    FREQ
-                </div>
-                <div style="color:#0f0; 
-                            font-family:'Segment7Standard', monospace;
-                            font-size:1.2em;
-                            text-shadow:0 0 5px #0f0;">
-                    107.8 FM
-                </div>
-            </div>
-            
-            <div>
-                <div style="color:#0f0; 
-                            font-family:'Segment7Standard', monospace;
-                            font-size:0.9em;
-                            text-shadow:0 0 5px #0f0;
-                            border-bottom:1px solid #0f0;
-                            margin-bottom:0.5rem;">
-                    VOL
-                </div>
-                <div style="color:#0f0; 
-                            font-family:'Segment7Standard', monospace;
-                            font-size:1.2em;
-                            text-shadow:0 0 5px #0f0;">
-                    [███░░]
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Animazioni -->
-    <style>
-        @keyframes scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        #playPauseBtn:hover {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow:0 0 25px rgba(0,255,0,0.5);
-        }
-    </style>
-</div>
-
-<audio id="radio-stream" hidden>
-    <source src="https://radiokiki.out.airtime.pro/radiokiki_a" type="audio/mpeg">
-</audio>
-
-<script src="player.js"></script>
+    <script src="player.js"></script>
 </body>
 </html>
