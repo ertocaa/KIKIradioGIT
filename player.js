@@ -1,11 +1,22 @@
 // Configurazione player audio
 const audioPlayer = document.getElementById('radio-stream');
-const playBtn = document.getElementById('playBtn');
-const pauseBtn = document.getElementById('pauseBtn');
+const playPauseBtn = document.getElementById('playPauseBtn');
+let isPlaying = false; // Stato iniziale: pausa
 
-// Controlli audio base
-playBtn.addEventListener('click', () => audioPlayer.play());
-pauseBtn.addEventListener('click', () => audioPlayer.pause());
+// Inizializza correttamente il pulsante
+playPauseBtn.textContent = 'Play';
+
+// Controllo audio
+playPauseBtn.addEventListener('click', () => {
+    if(isPlaying) {
+        audioPlayer.pause();
+        playPauseBtn.textContent = 'Play';
+    } else {
+        audioPlayer.play();
+        playPauseBtn.textContent = 'Pause';
+    }
+    isPlaying = !isPlaying;
+});
 
 // Funzione esistente per i metadati (corretta)
 async function fetchRadioData() {
