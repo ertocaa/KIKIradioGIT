@@ -25,3 +25,31 @@ async function fetchRadioData() {
 // Aggiorna i dati ogni 5 secondi
 setInterval(fetchRadioData, 5000);
 fetchRadioData(); // Chiamata iniziale
+
+// Configurazione player
+const audioPlayer = document.getElementById('radioStream');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+
+// Funzioni base
+playBtn.addEventListener('click', () => {
+    audioPlayer.play();
+});
+
+pauseBtn.addEventListener('click', () => {
+    audioPlayer.pause();
+});
+
+// Opzionale: Disabilita il pulsante pause all'avvio
+pauseBtn.disabled = true;
+
+// Opzionale: Cambia stato pulsanti durante la riproduzione
+audioPlayer.addEventListener('play', () => {
+    playBtn.disabled = true;
+    pauseBtn.disabled = false;
+});
+
+audioPlayer.addEventListener('pause', () => {
+    playBtn.disabled = false;
+    pauseBtn.disabled = true;
+});
