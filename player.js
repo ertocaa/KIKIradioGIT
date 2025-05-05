@@ -1,7 +1,18 @@
 // Configurazione player audio
 const audioPlayer = document.getElementById('radio-stream');
-const playBtn = document.getElementById('playBtn');
-const pauseBtn = document.getElementById('pauseBtn');
+const playPauseBtn = document.getElementById('playPauseBtn');
+
+// Toggle Play/Pause
+playPauseBtn.addEventListener('click', () => {
+    if(audioPlayer.paused) {
+        audioPlayer.play();
+        playPauseBtn.textContent = 'Pause';
+    } else {
+        audioPlayer.pause();
+        playPauseBtn.textContent = 'Play';
+    }
+});
+
 
 // Controlli audio base
 playBtn.addEventListener('click', () => audioPlayer.play());
